@@ -31,9 +31,11 @@
 <script>
 import { ref } from '@vue/reactivity'
 import BaseButton from './BaseButton.vue'
+import { useStore } from 'vuex'
 
 export default {
   setup() {
+    const store = useStore()
     const selected = ref('age')
 
     return {
