@@ -51,7 +51,7 @@ export default {
     }
 
     watch(store.state.conditions, (newValue) => {
-      console.log(`newValue`, newValue)
+      // console.log(`newValue`, newValue)
       conditionList.value = newValue
     })
 

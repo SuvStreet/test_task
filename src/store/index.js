@@ -2,20 +2,21 @@ import { createStore } from 'vuex'
 
 const mapDefault = {
   info: {
-    counterDiapason: 1,
-    min: 0,
-    max: 100,
-    placeholder: '0 - 100',
+    counterDiapason: [
+      {
+        id: 1,
+      },
+    ],
     selectedDefault: 'age',
   },
   type: {
     selectedTypeCard: 'type1',
-    selectedType: 'gold'
+    selectedType: 'gold',
   },
   status: {
     selectedStatusCard: 'status1',
-    selectedStatus: 'active'
-  }
+    selectedStatus: 'active',
+  },
 }
 
 export default createStore({
@@ -24,18 +25,27 @@ export default createStore({
   },
   mutations: {
     addCondition(state, payload) {
-      console.log(`payload`, payload)
       const value = {
         id: state.conditions.length,
         [payload]: mapDefault[payload],
       }
       state.conditions.push(value)
     },
+    addDiapason(state, payload){
+      const counterDiapason =  state.conditions[payload.id][payload.type].counterDiapason
+      
+      counterDiapason.push({
+        id: counterDiapason.length + 1,
+      })
+    }
   },
   actions: {},
   getters: {
     getConditions(state) {
       return state.conditions
-    }
-  }
+    },
+    getChoiceCondition(_, getters) {
+      return (id) => getters.getConditions.find((item) => item.id === id)
+    },
+  },
 })

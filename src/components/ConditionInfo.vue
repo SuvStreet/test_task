@@ -1,9 +1,13 @@
 <template>
   <div class="card">
     <div class="container">
-      <h3 for="value">Условие 1</h3>
+      <h3 for="value">Условие {{ condition.id + 1 }}</h3>
       <div class="form-control">
-        <select id="value" name="select" v-model="selected">
+        <select
+          id="value"
+          name="select"
+          v-model="condition.info.selectedDefault"
+        >
           <option value="age">Возраст респондента</option>
           <option value="height">Рост респондента</option>
           <option value="weight">Вес респондента</option>
@@ -11,35 +15,60 @@
       </div>
     </div>
 
-    <div class="form-control">
-      <p for="value">Диапазон 1</p>
+    <div
+      class="form-control"
+      v-for="diapason in condition.info.counterDiapason"
+      :key="diapason.id"
+    >
+      <p for="value">Диапазон {{ diapason.id }}</p>
       <label for="ot">
         От:
-        <input id="ot" type="number" min="0" max="100" placeholder="0 - 100" />
+        <input
+          id="ot"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="0-100"
+        />
       </label>
       <label for="do">
         До:
-        <input id="do" type="number" min="0" max="100" placeholder="0 - 100" />
+        <input
+          id="do"
+          type="number"
+          min="0"
+          max="100"
+          placeholder="0 - 100"
+        />
       </label>
     </div>
 
-    <base-button>Добавить диапазон</base-button>
-    <base-button color="danger"> Удалить условие </base-button>
+    <base-button @action="addDiapason">Добавить диапазон</base-button>
+    <base-button color="danger" @action="removeDiapason"> Удалить условие </base-button>
   </div>
 </template>
 
 <script>
-import { ref } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 import BaseButton from './BaseButton.vue'
 import { useStore } from 'vuex'
 
 export default {
-  setup() {
+  props: ['numberCondition'],
+  setup(props) {
     const store = useStore()
-    const selected = ref('age')
+
+    const condition = computed(() => {
+      return store.getters.getChoiceCondition(props.numberCondition)
+    })
+
+    const addDiapason = () => {
+      store.commit('addDiapason', { id: props.numberCondition, type: 'info' })
+    }
 
     return {
-      selected,
+      condition,
+      addDiapason,
     }
   },
   components: { BaseButton },
