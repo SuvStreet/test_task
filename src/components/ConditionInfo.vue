@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="container">
-      <h3 for="value">Условие {{ condition.id + 1 }}</h3>
+      <h3 for="value">Условие {{ numberCondition }}</h3>
       <div class="form-control">
         <select
           id="value"
@@ -13,38 +13,42 @@
           <option value="weight">Вес респондента</option>
         </select>
       </div>
-    </div>
 
-    <div
-      class="form-control"
-      v-for="diapason in condition.info.counterDiapason"
-      :key="diapason.id"
-    >
-      <p for="value">Диапазон {{ diapason.id }}</p>
-      <label for="ot">
-        От:
-        <input
-          id="ot"
-          type="number"
-          min="0"
-          max="100"
-          placeholder="0-100"
-        />
-      </label>
-      <label for="do">
-        До:
-        <input
-          id="do"
-          type="number"
-          min="0"
-          max="100"
-          placeholder="0 - 100"
-        />
-      </label>
+      <div
+        class="form-control"
+        v-for="diapason in condition.info.counterDiapason"
+        :key="diapason.id"
+      >
+        <p for="value">Диапазон {{ diapason.id }}</p>
+        <label for="ot">
+          От:
+          <input
+            id="ot"
+            type="number"
+            min="0"
+            max="100"
+            placeholder="0 - 100"
+            v-model="diapason.value.ot"
+          />
+        </label>
+        <label for="do">
+          До:
+          <input
+            id="do"
+            type="number"
+            min="0"
+            max="100"
+            placeholder="0 - 100"
+            v-model="diapason.value.do"
+          />
+        </label>
+      </div>
     </div>
 
     <base-button @action="addDiapason">Добавить диапазон</base-button>
-    <base-button color="danger" @action="removeDiapason"> Удалить условие </base-button>
+    <base-button color="danger" @action="removeCondition">
+      Удалить условие
+    </base-button>
   </div>
 </template>
 
@@ -55,7 +59,8 @@ import { useStore } from 'vuex'
 
 export default {
   props: ['numberCondition'],
-  setup(props) {
+  emits: ['removeCondition'],
+  setup(props, context) {
     const store = useStore()
 
     const condition = computed(() => {
@@ -63,12 +68,17 @@ export default {
     })
 
     const addDiapason = () => {
-      store.commit('addDiapason', { id: props.numberCondition, type: 'info' })
+      store.commit('addDiapason', props.numberCondition)
+    }
+
+    const removeCondition = () => {
+      context.emit('removeCondition', props.numberCondition)
     }
 
     return {
       condition,
       addDiapason,
+      removeCondition,
     }
   },
   components: { BaseButton },

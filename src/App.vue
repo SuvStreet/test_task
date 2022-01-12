@@ -4,15 +4,20 @@
       <h2>Добавить опрос</h2>
     </div>
 
+    <!-- <div class="card">
+      {{ conditionList }}
+    </div> -->
+
     <template v-for="condition in conditionList" :key="condition.id">
-      <component 
+      <component
         :is="'condition-' + Object.keys(condition)[1]"
         :numberCondition="condition.id"
+        @removeCondition="removeCondition"
       ></component>
     </template>
 
     <custom-select selected="default" @change="changeOption"></custom-select>
-<!-- 
+    <!-- 
     <div class="card">
       <p for="value">Условие 1</p>
       <div class="form-control">
@@ -42,28 +47,44 @@ export default {
   setup() {
     const store = useStore()
     const conditionList = ref([])
-    const selected = ref("")
-
-    function addCondition() {
-      if (selected.value !== "default" && selected.value !== "") {
-        store.commit('addCondition', selected.value)
-      }
-    }
+    const selected = ref('default')
 
     watch(store.state.conditions, (newValue) => {
-      // console.log(`newValue`, newValue)
+      console.log(`newValue`, newValue)
       conditionList.value = newValue
     })
 
+    const changeType = () => {
+      if (selected.value === 'info') {
+        store.commit('addConditionInfo', selected.value)
+      } else if (selected.value === 'type') {
+        store.commit('addConditionType', selected.value)
+      } else {
+        store.commit('addConditionStatus', selected.value)
+      }
+    }
+
+    const addCondition = () => {
+      if (selected.value !== 'default') {
+        changeType()
+      }
+    }
+
     const changeOption = (value) => {
+      console.log(`value`, value)
       selected.value = value
     }
 
+    const removeCondition = (id) => {
+      store.commit('removeCondition', id)
+      conditionList.value = store.getters.getConditions
+    }
+
     return {
-      selected,
       addCondition,
       conditionList,
-      changeOption
+      changeOption,
+      removeCondition
     }
   },
   components: {

@@ -1,43 +1,104 @@
 import { createStore } from 'vuex'
 
-const mapDefault = {
-  info: {
-    counterDiapason: [
-      {
-        id: 1,
-      },
-    ],
-    selectedDefault: 'age',
-  },
-  type: {
-    selectedTypeCard: 'type1',
-    selectedType: 'gold',
-  },
-  status: {
-    selectedStatusCard: 'status1',
-    selectedStatus: 'active',
-  },
-}
+// const mapDefault = {
+//   info: {
+//     counterDiapason: [],
+//     selectedDefault: 'age',
+//   },
+//   type: {
+//     selectedTypeCard: 'type1',
+//     selectedType: 'gold',
+//   },
+//   status: {
+//     selectedStatusCard: 'status1',
+//     selectedStatus: 'active',
+//   },
+// }
 
 export default createStore({
   state: {
-    conditions: [],
+    conditions: [
+      // {
+      //   id: 1,
+      //   info: {
+      //     counterDiapason: [1],
+      //     selectedDefault: 'age',
+      //   },
+      // },
+      // {
+      //   id: 2,
+      //   info: {
+      //     counterDiapason: [1, 2],
+      //     selectedDefault: 'age',
+      //   },
+      // },
+    ],
   },
   mutations: {
-    addCondition(state, payload) {
-      const value = {
-        id: state.conditions.length,
-        [payload]: mapDefault[payload],
-      }
-      state.conditions.push(value)
-    },
-    addDiapason(state, payload){
-      const counterDiapason =  state.conditions[payload.id][payload.type].counterDiapason
-      
-      counterDiapason.push({
-        id: counterDiapason.length + 1,
+    addConditionInfo(state, payload) {
+      state.conditions.push({
+        id: Math.random(),
+        [payload]: {
+          selectedDefault: 'age',
+          counterDiapason: [
+            {
+              id: Math.random(),
+              value: {
+                ot: '18',
+                do: '86',
+              },
+            },
+          ],
+        },
       })
-    }
+    },
+    addConditionType(state, payload) {
+      state.conditions.push({
+        id: Math.random(),
+        [payload]: {
+          selectedTypeCard: 'type1',
+          counterType: [
+            {
+              id: Math.random(),
+              value: 'gold',
+            },
+          ],
+        },
+      })
+    },
+    addConditionStatus(state, payload) {
+      state.conditions.push({
+        id: Math.random(),
+        [payload]: {
+          selectedStatus: 'status1',
+          counterStatus: [
+            {
+              id: Math.random(),
+              value: 'active',
+            },
+          ],
+        },
+      })
+    },
+    addDiapason(state, payload) {
+      state.conditions
+        .find((item) => item.id === payload)
+        .info.counterDiapason.push({ id: Math.random(), value: '' })
+    },
+    addType(state, payload) {
+      state.conditions
+        .find((item) => item.id === payload)
+        .type.counterType.push({ id: Math.random(), value: 'gold' })
+    },
+    addStatus(state, payload) {
+      state.conditions
+        .find((item) => item.id === payload)
+        .status.counterStatus.push({ id: Math.random(), value: 'active' })
+    },
+    removeCondition(state, payload) {
+      state.conditions = state.conditions
+        .filter((item) => item.id !== payload)
+    },
   },
   actions: {},
   getters: {
