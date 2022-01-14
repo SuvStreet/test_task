@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="container">
-      <h3 for="value">Условие {{ numberCondition }}</h3>
+      <h3 for="value">Условие {{ number }}</h3>
       <div class="form-control">
         <select
           id="value"
@@ -19,7 +19,7 @@
         v-for="diapason in condition.info.counterDiapason"
         :key="diapason.id"
       >
-        <p for="value">Диапазон {{ diapason.id }}</p>
+        <p for="value">Диапазон {{ condition.info.counterDiapason.indexOf(diapason) + 1 }}</p>
         <label for="ot">
           От:
           <input
@@ -53,26 +53,26 @@
 </template>
 
 <script>
-import { computed, ref } from '@vue/reactivity'
-import BaseButton from './BaseButton.vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
+import BaseButton from './BaseButton.vue'
 
 export default {
-  props: ['numberCondition'],
+  props: ['idCondition', "number"],
   emits: ['removeCondition'],
   setup(props, context) {
     const store = useStore()
 
     const condition = computed(() => {
-      return store.getters.getChoiceCondition(props.numberCondition)
+      return store.getters.getChoiceCondition(props.idCondition)
     })
 
     const addDiapason = () => {
-      store.commit('addDiapason', props.numberCondition)
+      store.dispatch('addDiapason', props.idCondition)
     }
 
     const removeCondition = () => {
-      context.emit('removeCondition', props.numberCondition)
+      context.emit('removeCondition', props.idCondition)
     }
 
     return {

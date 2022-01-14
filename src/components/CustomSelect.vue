@@ -1,6 +1,8 @@
 <template>
   <div class="card">
-    <p>Условие 1</p>
+    <p>
+      Добавить {{ $store.getters.getConditions.length + 1 }} условие
+    </p>
     <div class="form-control">
       <select id="value" name="select" v-model="changeOption">
         <option value="default">Выберите условие</option>
@@ -16,10 +18,10 @@
 import { ref, watch } from '@vue/runtime-core'
 
 export default {
-  props: ['selected'],
+  props: ['select'],
   emits: ['change'],
   setup(props, context) {
-    const changeOption = ref(props.selected)
+    const changeOption = ref(props.select)
 
     watch(changeOption, (newValue) => {
       context.emit('change', newValue)

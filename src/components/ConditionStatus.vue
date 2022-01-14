@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="container">
-      <h3 for="value">Условие {{ numberCondition }}</h3>
+      <h3 for="value">Условие {{ number }}</h3>
       <div class="form-control">
         <select
           id="statusCard"
@@ -17,12 +17,12 @@
 
     <div
       class="form-control"
-      v-for="condition in condition.status.counterStatus"
-      :key="condition.id"
+      v-for="status in condition.status.counterStatus"
+      :key="status.id"
     >
-      <p for="value">Статус {{ condition.id }}</p>
+      <p for="value">Статус {{ condition.status.counterStatus.indexOf(status) + 1 }}</p>
       <div class="form-control">
-        <select id="status" name="select" v-model="condition.value">
+        <select id="status" name="select" v-model="status.value">
           <option value="active">Активна</option>
           <option value="deactivated">Деактивирована</option>
           <option value="blocked">Заблокированна</option>
@@ -41,20 +41,20 @@ import BaseButton from './BaseButton.vue'
 import { useStore } from 'vuex'
 
 export default {
-  props: ['numberCondition'],
+  props: ['idCondition', 'number'],
   setup(props, context) {
     const store = useStore()
 
     const condition = computed(() => {
-      return store.getters.getChoiceCondition(props.numberCondition)
+      return store.getters.getChoiceCondition(props.idCondition)
     })
 
     const addStatus = () => {
-      store.commit('addStatus', props.numberCondition)
+      store.dispatch('addStatus', props.idCondition)
     }
 
     const removeCondition = () => {
-      context.emit('removeCondition', props.numberCondition)
+      context.emit('removeCondition', props.idCondition)
     }
 
     return {

@@ -1,89 +1,24 @@
 import { createStore } from 'vuex'
-
-// const mapDefault = {
-//   info: {
-//     counterDiapason: [],
-//     selectedDefault: 'age',
-//   },
-//   type: {
-//     selectedTypeCard: 'type1',
-//     selectedType: 'gold',
-//   },
-//   status: {
-//     selectedStatusCard: 'status1',
-//     selectedStatus: 'active',
-//   },
-// }
+import actions from './actions'
 
 export default createStore({
   state: {
-    conditions: [
-      // {
-      //   id: 1,
-      //   info: {
-      //     counterDiapason: [1],
-      //     selectedDefault: 'age',
-      //   },
-      // },
-      // {
-      //   id: 2,
-      //   info: {
-      //     counterDiapason: [1, 2],
-      //     selectedDefault: 'age',
-      //   },
-      // },
-    ],
+    conditions: [],
   },
   mutations: {
-    addConditionInfo(state, payload) {
-      state.conditions.push({
-        id: Math.random(),
-        [payload]: {
-          selectedDefault: 'age',
-          counterDiapason: [
-            {
-              id: Math.random(),
-              value: {
-                ot: '18',
-                do: '86',
-              },
-            },
-          ],
-        },
-      })
+    longConditions(state, payload) {
+      state.conditions = payload
     },
-    addConditionType(state, payload) {
-      state.conditions.push({
-        id: Math.random(),
-        [payload]: {
-          selectedTypeCard: 'type1',
-          counterType: [
-            {
-              id: Math.random(),
-              value: 'gold',
-            },
-          ],
-        },
-      })
-    },
-    addConditionStatus(state, payload) {
-      state.conditions.push({
-        id: Math.random(),
-        [payload]: {
-          selectedStatus: 'status1',
-          counterStatus: [
-            {
-              id: Math.random(),
-              value: 'active',
-            },
-          ],
-        },
-      })
+    addCondition(state, payload) {
+      state.conditions.push(payload)
     },
     addDiapason(state, payload) {
       state.conditions
         .find((item) => item.id === payload)
-        .info.counterDiapason.push({ id: Math.random(), value: '' })
+        .info.counterDiapason.push({
+          id: Math.random(),
+          value: { ot: '18', do: '86' },
+        })
     },
     addType(state, payload) {
       state.conditions
@@ -96,11 +31,10 @@ export default createStore({
         .status.counterStatus.push({ id: Math.random(), value: 'active' })
     },
     removeCondition(state, payload) {
-      state.conditions = state.conditions
-        .filter((item) => item.id !== payload)
+      state.conditions = state.conditions.filter((item) => item.id !== payload)
     },
   },
-  actions: {},
+  actions,
   getters: {
     getConditions(state) {
       return state.conditions

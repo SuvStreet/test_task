@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="container">
-      <h3>Условие {{ numberCondition }}</h3>
+      <h3>Условие {{ number }}</h3>
       <div class="form-control">
         <select
           id="typeCard"
@@ -16,11 +16,11 @@
 
       <div
         class="form-control"
-        v-for="condition in condition.type.counterType"
-        :key="condition.id"
+        v-for="type in condition.type.counterType"
+        :key="type.id"
       >
-        <p>Тип {{ condition.id }}</p>
-        <select id="type" name="select" v-model="condition.value">
+        <p>Тип {{ condition.type.counterType.indexOf(type) + 1 }}</p>
+        <select id="type" name="select" v-model="type.value">
           <option value="default">Default</option>
           <option value="platinum">Platinum</option>
           <option value="gold">Gold</option>
@@ -39,20 +39,20 @@ import BaseButton from './BaseButton.vue'
 import { useStore } from 'vuex'
 
 export default {
-  props: ['numberCondition'],
+  props: ['idCondition', "number"],
   setup(props, context) {
     const store = useStore()
 
     const condition = computed(() => {
-      return store.getters.getChoiceCondition(props.numberCondition)
+      return store.getters.getChoiceCondition(props.idCondition)
     })
 
     const addType = () => {
-      store.commit('addType', props.numberCondition)
+      store.dispatch('addType', props.idCondition)
     }
 
     const removeCondition = () => {
-      context.emit('removeCondition', props.numberCondition)
+      context.emit('removeCondition', props.idCondition)
     }
 
     return {

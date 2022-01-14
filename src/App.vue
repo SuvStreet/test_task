@@ -4,87 +4,77 @@
       <h2>Добавить опрос</h2>
     </div>
 
-    <!-- <div class="card">
-      {{ conditionList }}
-    </div> -->
+    <app-loader v-if="loader"></app-loader>
 
     <template v-for="condition in conditionList" :key="condition.id">
       <component
         :is="'condition-' + Object.keys(condition)[1]"
-        :numberCondition="condition.id"
+        :idCondition="condition.id"
+        :number="conditionList.indexOf(condition) + 1"
         @removeCondition="removeCondition"
       ></component>
     </template>
 
-    <custom-select selected="default" @change="changeOption"></custom-select>
-    <!-- 
-    <div class="card">
-      <p for="value">Условие 1</p>
-      <div class="form-control">
-        <select id="value" name="select" v-model="selected">
-          <option value="default">Выберите условие</option>
-          <option value="info">Условие 1</option>
-          <option value="type">Условие 2</option>
-          <option value="status">Условие 3</option>
-        </select>
-      </div>
-    </div> -->
+    <custom-select :select="selected" @change="changeOption"></custom-select>
 
     <base-button @action="addCondition">Добавить условие</base-button>
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
+
 import BaseButton from './components/BaseButton.vue'
 import ConditionInfo from './components/ConditionInfo.vue'
 import ConditionType from './components/ConditionType.vue'
 import ConditionStatus from './components/ConditionStatus.vue'
 import CustomSelect from './components/CustomSelect.vue'
+import AppLoader from './components/AppLoader.vue'
 
 export default {
   setup() {
     const store = useStore()
-    const conditionList = ref([])
+    const conditionList = ref(store.getters.getConditions)
     const selected = ref('default')
+    const loader = ref(false)
+    const number = ref([1])
 
-    watch(store.state.conditions, (newValue) => {
-      console.log(`newValue`, newValue)
-      conditionList.value = newValue
+    onMounted(() => {
+      loader.value = true
+      store.dispatch('longConditions').then(() => {
+        loader.value = false
+      })
     })
 
-    const changeType = () => {
-      if (selected.value === 'info') {
-        store.commit('addConditionInfo', selected.value)
-      } else if (selected.value === 'type') {
-        store.commit('addConditionType', selected.value)
-      } else {
-        store.commit('addConditionStatus', selected.value)
+    watch(
+      () => store.getters.getConditions,
+      () => {
+        conditionList.value = store.getters.getConditions
       }
-    }
+    )
 
     const addCondition = () => {
       if (selected.value !== 'default') {
-        changeType()
+        store.dispatch('addCondition', selected.value)
       }
     }
 
     const changeOption = (value) => {
-      console.log(`value`, value)
       selected.value = value
     }
 
     const removeCondition = (id) => {
-      store.commit('removeCondition', id)
-      conditionList.value = store.getters.getConditions
+      store.dispatch('removeCondition', id)
     }
 
     return {
+      loader,
       addCondition,
       conditionList,
       changeOption,
-      removeCondition
+      removeCondition,
+      selected,
     }
   },
   components: {
@@ -93,6 +83,7 @@ export default {
     ConditionType,
     ConditionStatus,
     CustomSelect,
+    AppLoader,
   },
 }
 </script>
