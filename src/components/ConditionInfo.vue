@@ -3,11 +3,7 @@
     <div class="container">
       <h3 for="value">Условие {{ number }}</h3>
       <div class="form-control">
-        <select
-          id="value"
-          name="select"
-          v-model="condition.info.selectedDefault"
-        >
+        <select id="value" name="select" v-model="selectedDefault">
           <option value="age">Возраст респондента</option>
           <option value="height">Рост респондента</option>
           <option value="weight">Вес респондента</option>
@@ -16,10 +12,10 @@
 
       <div
         class="form-control"
-        v-for="diapason in condition.info.counterDiapason"
+        v-for="diapason in counterDiapason"
         :key="diapason.id"
       >
-        <p for="value">Диапазон {{ condition.info.counterDiapason.indexOf(diapason) + 1 }}</p>
+        <p for="value">Диапазон {{ counterDiapason.indexOf(diapason) + 1 }}</p>
         <label for="ot">
           От:
           <input
@@ -58,7 +54,7 @@ import { useStore } from 'vuex'
 import BaseButton from './BaseButton.vue'
 
 export default {
-  props: ['idCondition', "number"],
+  props: ['idCondition', 'number'],
   emits: ['removeCondition'],
   setup(props, context) {
     const store = useStore()
@@ -75,8 +71,11 @@ export default {
       context.emit('removeCondition', props.idCondition)
     }
 
+    const {counterDiapason, selectedDefault} = condition.value.info
+
     return {
-      condition,
+      counterDiapason,
+      selectedDefault,
       addDiapason,
       removeCondition,
     }

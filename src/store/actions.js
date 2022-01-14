@@ -1,6 +1,7 @@
 import server from '../server'
 
 export default {
+  // загрузить все условия
   async longConditions({ commit }) {
     const data = await server.get('condition')
 
@@ -14,6 +15,7 @@ export default {
       commit('longConditions', value)
     }
   },
+  // добавить условие к списку
   async addCondition({ commit }, payload) {
     let condition = {}
 
@@ -62,18 +64,22 @@ export default {
 
     commit('addCondition', { id: data, ...condition })
   },
+  // добавить диапозон
   async addDiapason({ commit, getters }, payload) {
     commit('addDiapason', payload)
     await server.put(`condition`, payload, getters.getChoiceCondition(payload))
   },
+  // добавить тип
   async addType({ commit, getters }, payload) {
     commit('addType', payload)
     await server.put(`condition`, payload, getters.getChoiceCondition(payload))
   },
+  // добавить статус
   async addStatus({ commit, getters }, payload) {
     commit('addStatus', payload)
     await server.put(`condition`, payload, getters.getChoiceCondition(payload))
   },
+  // удалить условие из списка
   async removeCondition({ commit }, payload) {
     await server.delete(`condition`, payload)
     commit('removeCondition', payload)

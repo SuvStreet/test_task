@@ -6,7 +6,7 @@
         <select
           id="statusCard"
           name="select"
-          v-model="condition.status.selectedStatus"
+          v-model="selectedStatus"
         >
           <option value="status1">Статус карты лояльности</option>
           <option value="status2">Статус карты лояльности</option>
@@ -17,10 +17,12 @@
 
     <div
       class="form-control"
-      v-for="status in condition.status.counterStatus"
+      v-for="status in counterStatus"
       :key="status.id"
     >
-      <p for="value">Статус {{ condition.status.counterStatus.indexOf(status) + 1 }}</p>
+      <p for="value">
+        Статус {{ counterStatus.indexOf(status) + 1 }}
+      </p>
       <div class="form-control">
         <select id="status" name="select" v-model="status.value">
           <option value="active">Активна</option>
@@ -31,7 +33,9 @@
     </div>
 
     <base-button @action="addStatus">Добавить статус</base-button>
-    <base-button color="danger" @action="removeCondition"> Удалить условие </base-button>
+    <base-button color="danger" @action="removeCondition">
+      Удалить условие
+    </base-button>
   </div>
 </template>
 
@@ -57,10 +61,13 @@ export default {
       context.emit('removeCondition', props.idCondition)
     }
 
+    const { selectedStatus, counterStatus } = condition.value.status
+
     return {
       addStatus,
-      condition,
-      removeCondition
+      removeCondition,
+      selectedStatus,
+      counterStatus,
     }
   },
   components: { BaseButton },
