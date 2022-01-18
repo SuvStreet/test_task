@@ -21,6 +21,7 @@ export default {
 
     if (payload === 'info') {
       condition = {
+        id: Math.random(),
         [payload]: {
           selectedDefault: 'age',
           counterDiapason: [
@@ -36,6 +37,7 @@ export default {
       }
     } else if (payload === 'type') {
       condition = {
+        id: Math.random(),
         [payload]: {
           selectedTypeCard: 'type1',
           counterType: [
@@ -48,6 +50,7 @@ export default {
       }
     } else {
       condition = {
+        id: Math.random(),
         [payload]: {
           selectedStatus: 'status1',
           counterStatus: [
