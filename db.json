@@ -1,0 +1,58 @@
+{
+  "condition": [
+    {
+      "id": "-MtN_V4fRyfZKKwuqQS9",
+      "type": {
+        "counterType": [
+          {
+            "id": "0.40612791406700577",
+            "value": "gold"
+          }
+        ],
+        "selectedTypeCard": "type1"
+      }
+    },
+    {
+      "id": "-MtN_VhD2zC11SwenFCH",
+      "status": {
+        "counterStatus": [
+          {
+            "id": "0.20054473111152826",
+            "value": "active"
+          }
+        ],
+        "selectedStatus": "status1"
+      }
+    },
+    {
+      "id": "-MtNbQQGKr8SRudaHgPe",
+      "info": {
+        "counterDiapason": [
+          {
+            "id": "0.828370863399607",
+            "value": {
+              "ot": "18",
+              "do": "86"
+            }
+          }
+        ],
+        "selectedDefault": "age"
+      }
+    },
+    {
+      "info": {
+        "selectedDefault": "age",
+        "counterDiapason": [
+          {
+            "id": 0.6712118719294109,
+            "value": {
+              "ot": "18",
+              "do": "86"
+            }
+          }
+        ]
+      },
+      "id": "htVJpLw"
+    }
+  ]
+}
